@@ -1,4 +1,4 @@
-# gsm — Git Stash Manager
+# gsm : Git Stash Manager
 
 An interactive terminal TUI for managing git stashes. Built with Rust + Ratatui.
 
