@@ -11,6 +11,8 @@ An interactive terminal TUI for managing git stashes. Built with Rust + Ratatui.
 │ 3   fix/styles       |    CSS tweaks                |  last week         │
 │                                                                           │
 └───────────────────────────────────────────────────────────────────────────┘
+```
+```
 ┌──────────────────────────────────────────────────────────────────────────┐
 │ [↑↓/jk] navigate  [Enter/d] diff  [f] files  [a] apply  [p] pop        │
 │ [x] drop  [n] new  [/] search  [q] quit                                 │
