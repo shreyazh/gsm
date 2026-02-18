@@ -98,4 +98,4 @@ cargo build --release
 
 ## License
 
-MIT
+MITetcetera

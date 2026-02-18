@@ -7,7 +7,7 @@ use ratatui::{
     Frame,
 };
 
-const BRAND: Color = Color::Rgb(255, 135, 0); // orange accent
+const BRAND: Color = Color::Rgb(255, 135, 0);
 const ADDED: Color = Color::Green;
 const REMOVED: Color = Color::Red;
 const DIM: Color = Color::DarkGray;
@@ -39,9 +39,9 @@ fn render_main(f: &mut Frame, app: &App) {
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .constraints([
-            Constraint::Length(3), // header
-            Constraint::Min(5),    // stash list
-            Constraint::Length(3), // footer / keybinds
+            Constraint::Length(3),
+            Constraint::Min(5),
+            Constraint::Length(3),
         ])
         .split(area);
 
@@ -60,9 +60,20 @@ fn render_header(f: &mut Frame, area: Rect, app: &App) {
     };
 
     let title = Line::from(vec![
-        Span::styled(" gsm ", Style::default().fg(Color::Black).bg(BRAND).add_modifier(Modifier::BOLD)),
         Span::styled(
-            format!("  branch: {}  stashes: {}{}", app.current_branch, app.stashes.len(), search_indicator),
+            " gsm ",
+            Style::default()
+                .fg(Color::Black)
+                .bg(BRAND)
+                .add_modifier(Modifier::BOLD),
+        ),
+        Span::styled(
+            format!(
+                "  branch: {}  stashes: {}{}",
+                app.current_branch,
+                app.stashes.len(),
+                search_indicator
+            ),
             Style::default().fg(Color::Gray),
         ),
     ]);
@@ -84,10 +95,14 @@ fn render_stash_list(f: &mut Frame, area: Rect, app: &App) {
         .map(|(i, stash)| {
             let is_selected = i == app.selected;
             let index_style = Style::default().fg(BRAND);
-            let branch_style = Style::default().fg(Color::Cyan).add_modifier(Modifier::ITALIC);
+            let branch_style = Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::ITALIC);
             let date_style = Style::default().fg(DIM);
             let msg_style = if is_selected {
-                Style::default().fg(Color::White).add_modifier(Modifier::BOLD)
+                Style::default()
+                    .fg(Color::White)
+                    .add_modifier(Modifier::BOLD)
             } else {
                 Style::default().fg(Color::Gray)
             };
@@ -95,24 +110,29 @@ fn render_stash_list(f: &mut Frame, area: Rect, app: &App) {
             let line = Line::from(vec![
                 Span::styled(format!("{:<3}", stash.index), index_style),
                 Span::raw(" "),
-                Span::styled(format!("{:<20}", truncate(&stash.branch, 20)), branch_style),
+                Span::styled(
+                    format!("{:<20}", truncate(&stash.branch, 20)),
+                    branch_style,
+                ),
                 Span::raw(" "),
-                Span::styled(format!("{:<35}", truncate(&stash.short_msg, 35)), msg_style),
+                Span::styled(
+                    format!("{:<35}", truncate(&stash.short_msg, 35)),
+                    msg_style,
+                ),
                 Span::raw(" "),
-                Span::styled(format!("{}", stash.date), date_style),
+                Span::styled(stash.date.clone(), date_style),
             ]);
 
             ListItem::new(line)
         })
         .collect();
 
-    let empty_msg = if app.stashes.is_empty() {
-        "No stashes found. Press 'n' to create one."
-    } else {
-        "No stashes match your search."
-    };
-
     if items.is_empty() {
+        let empty_msg = if app.stashes.is_empty() {
+            "No stashes found. Press 'n' to create one."
+        } else {
+            "No stashes match your search."
+        };
         let p = Paragraph::new(empty_msg)
             .style(Style::default().fg(DIM))
             .alignment(Alignment::Center)
@@ -149,7 +169,7 @@ fn render_stash_list(f: &mut Frame, area: Rect, app: &App) {
 }
 
 fn render_footer(f: &mut Frame, area: Rect, app: &App) {
-    let keys = if app.searching {
+    let keys: Vec<Vec<Span>> = if app.searching {
         vec![
             key_span("Enter", "confirm"),
             key_span("Esc", "cancel search"),
@@ -168,10 +188,10 @@ fn render_footer(f: &mut Frame, area: Rect, app: &App) {
         ]
     };
 
-    let mut spans = Vec::new();
+    let mut spans: Vec<Span> = Vec::new();
     for (i, s) in keys.into_iter().enumerate() {
         if i > 0 {
-            spans.push(Span::styled("  ", Style::default()));
+            spans.push(Span::raw("  "));
         }
         spans.extend(s);
     }
@@ -194,10 +214,7 @@ fn key_span(key: &str, desc: &str) -> Vec<Span<'static>> {
             format!("[{key}]"),
             Style::default().fg(BRAND).add_modifier(Modifier::BOLD),
         ),
-        Span::styled(
-            format!(" {desc}"),
-            Style::default().fg(Color::Gray),
-        ),
+        Span::styled(format!(" {desc}"), Style::default().fg(Color::Gray)),
     ]
 }
 
@@ -206,10 +223,13 @@ fn render_diff_view(f: &mut Frame, app: &App, is_files: bool) {
 
     let chunks = Layout::default()
         .direction(Direction::Vertical)
-        .constraints([Constraint::Length(3), Constraint::Min(1), Constraint::Length(3)])
+        .constraints([
+            Constraint::Length(3),
+            Constraint::Min(1),
+            Constraint::Length(3),
+        ])
         .split(area);
 
-    // Header
     let stash_info = app
         .selected_stash()
         .map(|s| format!("{} — {}", s.name, s.short_msg))
@@ -218,9 +238,15 @@ fn render_diff_view(f: &mut Frame, app: &App, is_files: bool) {
     let title = Line::from(vec![
         Span::styled(
             if is_files { " Files " } else { " Diff " },
-            Style::default().fg(Color::Black).bg(BRAND).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::Black)
+                .bg(BRAND)
+                .add_modifier(Modifier::BOLD),
         ),
-        Span::styled(format!("  {stash_info}"), Style::default().fg(Color::Gray)),
+        Span::styled(
+            format!("  {stash_info}"),
+            Style::default().fg(Color::Gray),
+        ),
     ]);
 
     let header = Block::default()
@@ -230,7 +256,6 @@ fn render_diff_view(f: &mut Frame, app: &App, is_files: bool) {
 
     f.render_widget(header, chunks[0]);
 
-    // Diff content
     let visible_height = chunks[1].height.saturating_sub(2) as usize;
     let lines: Vec<Line> = app
         .diff_content
@@ -250,26 +275,27 @@ fn render_diff_view(f: &mut Frame, app: &App, is_files: bool) {
 
     f.render_widget(diff, chunks[1]);
 
-    // Footer
     let scroll_info = format!(
         "line {}/{}",
         app.diff_scroll + 1,
         app.diff_content.len().max(1)
     );
-    let footer = Paragraph::new(Line::from(vec![
-        key_span("↑↓/jk", "scroll"),
-        Span::raw("   "),
-        key_span("PgUp/PgDn", "fast scroll"),
-        Span::raw("   "),
-        key_span("Esc/q", "back"),
-        Span::raw(format!("   {scroll_info}")),
-    ]))
-    .block(
-        Block::default()
-            .borders(Borders::ALL)
-            .border_style(Style::default().fg(Color::Rgb(60, 60, 80))),
-    )
-    .alignment(Alignment::Center);
+
+    let mut footer_spans: Vec<Span> = Vec::new();
+    footer_spans.extend(key_span("↑↓/jk", "scroll"));
+    footer_spans.push(Span::raw("   "));
+    footer_spans.extend(key_span("PgUp/PgDn", "fast scroll"));
+    footer_spans.push(Span::raw("   "));
+    footer_spans.extend(key_span("Esc/q", "back"));
+    footer_spans.push(Span::raw(format!("   {scroll_info}")));
+
+    let footer = Paragraph::new(Line::from(footer_spans))
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .border_style(Style::default().fg(Color::Rgb(60, 60, 80))),
+        )
+        .alignment(Alignment::Center);
 
     f.render_widget(footer, chunks[2]);
 }
@@ -281,8 +307,17 @@ fn colorize_diff_line(line: &str) -> Line<'static> {
         (Style::default().fg(REMOVED), line.to_string())
     } else if line.starts_with("@@") {
         (Style::default().fg(Color::Cyan), line.to_string())
-    } else if line.starts_with("diff ") || line.starts_with("index ") || line.starts_with("---") || line.starts_with("+++") {
-        (Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD), line.to_string())
+    } else if line.starts_with("diff ")
+        || line.starts_with("index ")
+        || line.starts_with("---")
+        || line.starts_with("+++")
+    {
+        (
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+            line.to_string(),
+        )
     } else {
         (Style::default().fg(Color::Gray), line.to_string())
     };
@@ -295,9 +330,21 @@ fn render_confirm_popup(f: &mut Frame, action: &ConfirmAction) {
     f.render_widget(Clear, area);
 
     let (title, body, color) = match action {
-        ConfirmAction::Apply => ("Apply Stash", "Apply this stash? (it stays in the stash list)", Color::Green),
-        ConfirmAction::Pop => ("Pop Stash", "Apply and remove this stash from the list?", Color::Yellow),
-        ConfirmAction::Drop => ("Drop Stash", "Permanently delete this stash? This cannot be undone.", Color::Red),
+        ConfirmAction::Apply => (
+            "Apply Stash",
+            "Apply this stash? (it stays in the stash list)",
+            Color::Green,
+        ),
+        ConfirmAction::Pop => (
+            "Pop Stash",
+            "Apply and remove this stash from the list?",
+            Color::Yellow,
+        ),
+        ConfirmAction::Drop => (
+            "Drop Stash",
+            "Permanently delete this stash? This cannot be undone.",
+            Color::Red,
+        ),
     };
 
     let content = vec![
@@ -305,7 +352,12 @@ fn render_confirm_popup(f: &mut Frame, action: &ConfirmAction) {
         Line::from(Span::styled(body, Style::default().fg(Color::White))),
         Line::from(""),
         Line::from(vec![
-            Span::styled("[y] Yes", Style::default().fg(Color::Green).add_modifier(Modifier::BOLD)),
+            Span::styled(
+                "[y] Yes",
+                Style::default()
+                    .fg(Color::Green)
+                    .add_modifier(Modifier::BOLD),
+            ),
             Span::raw("    "),
             Span::styled("[n] No", Style::default().fg(Color::Red)),
         ]),
@@ -328,17 +380,28 @@ fn render_new_stash_popup(f: &mut Frame, app: &App) {
     f.render_widget(Clear, area);
 
     let untracked_label = if app.new_stash_untracked {
-        Span::styled("[Tab] Include untracked: ON ", Style::default().fg(Color::Green))
+        Span::styled(
+            "[Tab] Include untracked: ON ",
+            Style::default().fg(Color::Green),
+        )
     } else {
-        Span::styled("[Tab] Include untracked: off", Style::default().fg(DIM))
+        Span::styled(
+            "[Tab] Include untracked: off",
+            Style::default().fg(DIM),
+        )
     };
 
     let content = vec![
         Line::from(""),
-        Line::from(Span::styled("Stash message:", Style::default().fg(Color::Gray))),
+        Line::from(Span::styled(
+            "Stash message:",
+            Style::default().fg(Color::Gray),
+        )),
         Line::from(Span::styled(
             format!("{}_", app.new_stash_input),
-            Style::default().fg(Color::White).add_modifier(Modifier::BOLD),
+            Style::default()
+                .fg(Color::White)
+                .add_modifier(Modifier::BOLD),
         )),
         Line::from(""),
         Line::from(untracked_label),
@@ -372,9 +435,15 @@ fn render_message_popup(f: &mut Frame, msg: &str) {
 
     let content = vec![
         Line::from(""),
-        Line::from(Span::styled(msg.to_string(), Style::default().fg(Color::White))),
+        Line::from(Span::styled(
+            msg.to_string(),
+            Style::default().fg(Color::White),
+        )),
         Line::from(""),
-        Line::from(Span::styled("Press any key to continue", Style::default().fg(DIM))),
+        Line::from(Span::styled(
+            "Press any key to continue",
+            Style::default().fg(DIM),
+        )),
     ];
 
     let popup = Paragraph::new(content)

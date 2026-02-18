@@ -11,19 +11,28 @@ pub fn handle_events(app: &mut App) -> Result<bool> {
     }
 
     if let Event::Key(key) = event::read()? {
-        match &app.mode.clone() {
-            Mode::Normal => handle_normal(app, key.code, key.modifiers)?,
-            Mode::Diff | Mode::Files => handle_scroll(app, key.code)?,
-            Mode::Confirm(action) => handle_confirm(app, key.code, action.clone())?,
-            Mode::NewStash => handle_new_stash(app, key.code)?,
-            Mode::Message(_) => {
-                // Any key dismisses the message
-                app.mode = Mode::Normal;
+    match &app.mode.clone() {
+        Mode::Normal => {
+            if handle_normal(app, key.code, key.modifiers)? {
+                return Ok(true);
             }
         }
+        Mode::Diff | Mode::Files => {
+            handle_scroll(app, key.code)?;
+        }
+        Mode::Confirm(action) => {
+            handle_confirm(app, key.code, action.clone())?;
+        }
+        Mode::NewStash => {
+            handle_new_stash(app, key.code)?;
+        }
+        Mode::Message(_) => {
+            app.mode = Mode::Normal;
+        }
     }
+}
 
-    Ok(false)
+Ok(false)
 }
 
 fn handle_normal(app: &mut App, key: KeyCode, _mods: KeyModifiers) -> Result<bool> {
