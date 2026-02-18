@@ -1,11 +1,11 @@
 [package]
 name = "gsm"
 version = "0.1.0"
-edition = "2021"
+edition = "2026"
 description = "An interactive TUI for managing git stashes"
 authors = ["You"]
 license = "MIT"
-repository = "https://github.com/you/gsm"
+repository = "https://github.com/shreyazh/gsm"
 readme = "README.md"
 
 [[bin]]

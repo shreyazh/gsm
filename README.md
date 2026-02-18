@@ -46,7 +46,7 @@ git stash drop 2      # pray you got the number right
 ### From source (requires Rust)
 
 ```sh
-git clone https://github.com/you/gsm
+git clone https://github.com/shreyazh/gsm
 cd gsm
 cargo install --path .
 ```
@@ -59,7 +59,7 @@ brew install gsm
 
 ### Direct binary
 
-Download from [releases](https://github.com/you/gsm/releases).
+Download from [releases](https://github.com/shreyazh/gsm/releases).
 
 ## Keybindings
 
