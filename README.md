@@ -3,12 +3,12 @@
 An interactive terminal TUI for managing git stashes. Built with Rust + Ratatui.
 
 ```
-┌ gsm  branch: main  stashes: 4 ──────────────────────────────────────────┐
-│                                                                           │
-│ 0   main                 WIP auth middleware           2 hours ago        │
-│▶ 1   feature/login        half-done login form          yesterday         │
-│ 2   main                 quick hotfix attempt           3 days ago        │
-│ 3   fix/styles           CSS tweaks                     last week         │
+┌ gsm  branch: main  stashes: 4 ─────────────────────────────────────────────┐
+│                                                                            │
+│ 0   main             |    WIP auth middleware       |    2 hours ago        │
+│▶ 1   feature/login   |     half-done login form    |     yesterday        │
+│ 2   main             |    quick hotfix attempt      |   3 days ago        │
+│ 3   fix/styles       |    CSS tweaks                |  last week         │
 │                                                                           │
 └───────────────────────────────────────────────────────────────────────────┘
 ┌──────────────────────────────────────────────────────────────────────────┐
