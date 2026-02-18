@@ -3,20 +3,16 @@
 An interactive terminal TUI for managing git stashes. Built with Rust + Ratatui.
 
 ```
-┌ gsm  branch: main  stashes: 4 ─────────────────────────────────────────────┐
-│                                                                            │
-│ 0   main             |    WIP auth middleware       |    2 hours ago        │
-│▶ 1   feature/login   |     half-done login form    |     yesterday        │
-│ 2   main             |    quick hotfix attempt      |   3 days ago        │
-│ 3   fix/styles       |    CSS tweaks                |  last week         │
-│                                                                           │
-└───────────────────────────────────────────────────────────────────────────┘
-```
-```
-┌──────────────────────────────────────────────────────────────────────────┐
-│ [↑↓/jk] navigate  [Enter/d] diff  [f] files  [a] apply  [p] pop        │
-│ [x] drop  [n] new  [/] search  [q] quit                                 │
-└──────────────────────────────────────────────────────────────────────────┘
+gsm  branch: main  stashes: 4
+=======================================================================
+  0   main            |  WIP auth middleware        |  2 hours ago            
+ >1   feature/login   |  half-done login form       |  yesterday              
+  2   main            |  quick hotfix attempt       |  3 days ago             
+  3   fix/styles      |  CSS tweaks                 |  last week              
+=======================================================================    
+
+[↑↓/jk] navigate  [Enter/d] diff  [f] files  [a] apply  [p] pop  [x] drop  [n] new  [/] search  [q] quit
+
 ```
 
 ## Why?
@@ -24,7 +20,7 @@ An interactive terminal TUI for managing git stashes. Built with Rust + Ratatui.
 `git stash` is powerful but painful to use once you have more than 2 stashes. The default CLI gives you:
 
 ```sh
-git stash list        # a wall of text
+git stash list        # list of stupid text
 git stash show -p 2   # if you remember the index
 git stash drop 2      # pray you got the number right
 ```
@@ -100,4 +96,4 @@ cargo build --release
 
 ## License
 
-MITetcetera
+[MIT License](github.com/shreyazh/LICENSE)
