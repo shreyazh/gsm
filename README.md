@@ -96,4 +96,4 @@ cargo build --release
 
 ## License
 
-[MIT License](github.com/shreyazh/LICENSE)
+[MIT License](https://github.com/shreyazh/gsm/blob/main/github.com/shreyazh/LICENSE)
